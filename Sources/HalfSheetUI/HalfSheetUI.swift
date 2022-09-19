@@ -4,9 +4,9 @@ import UIKit
 @available(iOS 13.0, *)
 @available(iOS 15.0, *)
 // 1 - Create a UISheetPresentationController that can be used in a SwiftUI interface
-struct HalfSheetUI<Content: View>: UIViewRepresentable {
+public struct HalfSheetUI<Content: View>: UIViewRepresentable {
     
-    @Binding var isPresented: Bool
+    @Binding public var isPresented: Bool
     var firstDetent: UISheetPresentationController.Detent.Identifier? = .large
     let detents: [UISheetPresentationController.Detent]
     var prefersGrabberVisible: Bool? = false
@@ -15,7 +15,7 @@ struct HalfSheetUI<Content: View>: UIViewRepresentable {
     let content: Content
     @State private var getState: UISheetPresentationController.Detent.Identifier = .large
     
-    init(isPresented: Binding<Bool>,
+    public init(isPresented: Binding<Bool>,
          prefersGrabberVisible: Bool? = nil,
          detents: [UISheetPresentationController.Detent] = [.medium()],
          firstDetent: UISheetPresentationController.Detent.Identifier? = .large,
@@ -32,12 +32,12 @@ struct HalfSheetUI<Content: View>: UIViewRepresentable {
         self.content = content()
     }
     
-    func makeUIView(context: Context) -> UIView {
+    public func makeUIView(context: Context) -> UIView {
         let view = UIView()
         return view
     }
     
-    func updateUIView(_ uiView: UIView, context: Context) {
+    public func updateUIView(_ uiView: UIView, context: Context) {
         
         // Create the UIViewController that will be presented by the UIButton
         let vc = UIViewController()
@@ -84,16 +84,16 @@ struct HalfSheetUI<Content: View>: UIViewRepresentable {
     /* Creates the custom instance that you use to communicate changes
      from your view controller to other parts of your SwiftUI interface.
      */
-    func makeCoordinator() -> Coordinator {
+    public func makeCoordinator() -> Coordinator {
         Coordinator(isPresented: $isPresented, state: state, onDismiss: onDismiss)
     }
     
-    class Coordinator: NSObject, UISheetPresentationControllerDelegate {
+    public class Coordinator: NSObject, UISheetPresentationControllerDelegate {
         @Binding var isPresented: Bool
         let onDismiss: (() -> Void)?
         var state: Binding<UISheetPresentationController.Detent.Identifier>?
         
-        init(isPresented: Binding<Bool>,
+        public init(isPresented: Binding<Bool>,
              state: Binding<UISheetPresentationController.Detent.Identifier>? = nil,
              onDismiss: (() -> Void)? = nil)
         {
@@ -102,12 +102,12 @@ struct HalfSheetUI<Content: View>: UIViewRepresentable {
             self.onDismiss = onDismiss
         }
         
-        func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
+        public func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
             self.isPresented = false
             self.onDismiss?()
         }
         
-        func sheetPresentationControllerDidChangeSelectedDetentIdentifier(_ sheetPresentationController: UISheetPresentationController) {
+        public func sheetPresentationControllerDidChangeSelectedDetentIdentifier(_ sheetPresentationController: UISheetPresentationController) {
             self.state?.wrappedValue = sheetPresentationController.selectedDetentIdentifier ?? .large
         }
     }

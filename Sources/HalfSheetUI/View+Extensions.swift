@@ -10,7 +10,7 @@ import UIKit
 
 @available(iOS 13.0, *)
 @available(iOS 15.0, *)
-extension View {
+public extension View {
     func halfSheetUI<Content:View>(isPresented: Binding<Bool>, prefersGrabberVisible: Bool? = false, detents: [UISheetPresentationController.Detent], firstDetent: UISheetPresentationController.Detent.Identifier? = .large, state: Binding<UISheetPresentationController.Detent.Identifier>? = nil, onDismiss: (() -> Void)? = nil, @ViewBuilder content: @escaping () -> Content) -> some View {
         modifier(halfSheetViewModifier(isPresented: isPresented, prefersGrabberVisible: prefersGrabberVisible, detents: detents, firstDetent: firstDetent, state: state, onDismiss: onDismiss, swiftUIContent: content))
     }
@@ -19,7 +19,7 @@ extension View {
 @available(iOS 13.0, *)
 @available(iOS 15.0, *)
 // 2 - Create the SwiftUI modifier conforming to the ViewModifier protocol
-struct halfSheetViewModifier<SwiftUIContent : View>: ViewModifier {
+public struct halfSheetViewModifier<SwiftUIContent : View>: ViewModifier {
     
     @Binding var isPresented: Bool
     
@@ -35,7 +35,7 @@ struct halfSheetViewModifier<SwiftUIContent : View>: ViewModifier {
     
     let swiftUIContent: SwiftUIContent
     
-    init(isPresented: Binding<Bool>,
+    public init(isPresented: Binding<Bool>,
          prefersGrabberVisible: Bool? = nil,
          detents: [UISheetPresentationController.Detent],
          firstDetent: UISheetPresentationController.Detent.Identifier? = .large,
@@ -52,7 +52,7 @@ struct halfSheetViewModifier<SwiftUIContent : View>: ViewModifier {
         self.swiftUIContent = swiftUIContent()
     }
     
-    func body(content: Content) -> some View {
+    public func body(content: Content) -> some View {
         ZStack {
             HalfSheetUI(isPresented: $isPresented, prefersGrabberVisible: prefersGrabberVisible, detents: detents, firstDetent: firstDetent, state: state, onDismiss: onDismiss) {
                 swiftUIContent
